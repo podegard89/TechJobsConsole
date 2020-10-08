@@ -25,12 +25,13 @@ namespace TechJobsConsole
             LoadData();
 
             List<string> values = new List<string>();
+            List<string> lowercaseValues = values.ConvertAll(d => d.ToLower());
 
             foreach (Dictionary<string, string> job in AllJobs)
             {
                 string aValue = job[column];
 
-                if (!values.Contains(aValue))
+                if (!lowercaseValues.Contains(aValue.ToLower()))
                 {
                     values.Add(aValue);
                 }
@@ -49,9 +50,29 @@ namespace TechJobsConsole
             {
                 string aValue = row[column];
 
-                if (aValue.Contains(value))
+                if (aValue.ToLower().Contains(value.ToLower()))
                 {
                     jobs.Add(row);
+                }
+            }
+
+            return jobs;
+        }
+
+        public static List<Dictionary<string, string>> FindByValue(string value)
+        {
+            LoadData();
+
+            List<Dictionary<string, string>> jobs = new List<Dictionary<string, string>>();
+
+            foreach (Dictionary<string, string> row in AllJobs)
+            {
+                foreach (string job in row.Values)
+                {
+                    if (job.ToLower().Contains(value.ToLower()) && !jobs.Contains(row))
+                    {
+                        jobs.Add(row);
+                    }
                 }
             }
 
